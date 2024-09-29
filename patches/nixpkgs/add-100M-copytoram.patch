@@ -1,0 +1,11 @@
+--- A/nixos/modules/system/boot/stage-1-init.sh	1970-01-01 01:00:01.000000000 +0100
++++ B/nixos/modules/system/boot/stage-1-init.sh	2024-09-29 23:37:29.302973346 +0200
+@@ -570,7 +570,7 @@
+     # If copytoram is enabled: skip mounting the ISO and copy its content to a tmpfs.
+     if [ -n "$copytoram" ] && [ "$device" = /dev/root ] && [ "$mountPoint" = /iso ]; then
+       fsType=$(blkid -o value -s TYPE "$device")
+-      fsSize=$(blockdev --getsize64 "$device" || stat -Lc '%s' "$device")
++      fsSize=$(( $(blockdev --getsize64 "$device" || stat -Lc '%s' "$device") + 100000 ))
+ 
+       mkdir -p /tmp-iso
+       mount -t "$fsType" /dev/root /tmp-iso
